@@ -1,9 +1,24 @@
-const path = require("path");
-const file = require("fs");
-const MarkdownIt = require("markdown-it");
+import path from "path";
+import file from "fs";
+import MarkdownIt from "markdown-it";
 import { style } from "./assets/juejin.style";
+import hljs from 'highlight.js'
+import emoji from 'markdown-it-emoji'
 
-const md = new MarkdownIt();
+const highlight = (str, lang) => {
+  if (!lang || !hljs.getLanguage(lang)) {
+    return '<pre><code class="hljs">' + str + '</code></pre>'
+  }
+  const html = hljs.highlight(str, { language: lang, ignoreIllegals: true }).value
+  return `<pre><code class="hljs language-${lang}">${html}</code></pre>`
+}
+
+const md = new MarkdownIt({
+  html: true,
+  highlight
+});
+md.use(emoji);
+
 export const transformMarkdown = (mdText) => {
   // 加上一个 class 名为 article-content 的 wrapper，方便我们等下添加样式
   return `
@@ -85,11 +100,14 @@ export default function markdownPlugin() {
         mdRelationMap.set(mdFilePath, id);
       });
 
+      // transformCode = `
+      //   ${transformCode}
+      //   <style scoped>
+      //     ${style}
+      //   </style>
+      // `;
       transformCode = `
         ${transformCode}
-        <style scoped>
-          ${style}
-        </style>
       `;
 
       // 将转换后的代码返回
@@ -97,9 +115,3 @@ export default function markdownPlugin() {
     },
   };
 }
-
-// overwrite for cjs require('...')() usage
-module.exports = markdownPlugin;
-// markdownPlugin['default'] = markdownPlugin
-
-// export markdownPlugin
