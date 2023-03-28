@@ -11,5 +11,6 @@ import HelloWorld from "./components/HelloWorld.vue";
 <style scoped>
 .page-wrapper {
   text-align: left;
+  font-size: 24rpx;
 }
 </style>
