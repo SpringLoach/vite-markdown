@@ -4,6 +4,11 @@ import markdown from "./plugin/markdown/index";
 import unitFit from "./plugin/unitFit/index";
 
 export default defineConfig({
-  // plugins: [vue(), markdown()],
-  plugins: [vue(), markdown(), unitFit()],
+  plugins: [
+    vue(),
+    markdown(),
+    unitFit({
+      viewportWidth: 1920,
+    }),
+  ],
 });

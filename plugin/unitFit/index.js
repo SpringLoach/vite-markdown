@@ -8,7 +8,7 @@ export const transformStyle = (style) => {
   let transformCode = style;
   rpxList?.forEach((rpx) => {
     const origin = rpx.replace("rpx", "");
-    const vw = `${(origin * 100) / 1920}vw`;
+    const vw = `${(origin * 100) / designDraftWidth}vw`;
     // 将 style 标签的内容替换
     transformCode = transformCode.replace(rpx, vw);
   });
@@ -16,8 +16,8 @@ export const transformStyle = (style) => {
   return transformCode;
 };
 
-export default function unitFitPlugin(val) {
-  designDraftWidth = val || 1920;
+export default function unitFitPlugin({ viewportWidth }) {
+  designDraftWidth = viewportWidth || 1920;
   const vueRE = /\.vue$/;
   const styleRE = /(?<=\<style scoped\>)[\s\S]*(?=\<\/style\>)/g;
 
